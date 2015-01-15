@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sliding Bar Test</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_hide">Hide Panel</string>
+    <string name="action_show">Show Panel</string>
+    <string name="action_anchor_enable">Enable Anchor Point</string>
+    <string name="action_anchor_disable">Disable Anchor Point</string>
+    <string name="hello">hello!</string>
+    <string name="follow">follow</string>
+    <string name="testo">Michelangelo di Lodovico Buonarroti Simoni (6 March 1475 – 18 February 1564), commonly known as Michelangelo (Italian pronunciation: [mikeˈlandʒelo]), was an Italian sculptor, painter, architect, poet, and engineer of the High Renaissance who exerted an unparalleled influence on the development of Western art.[1] Despite making few forays beyond the arts, his versatility in the disciplines he took up was of such a high order that he is often considered a contender for the title of the archetypal Renaissance man, along with his fellow Italian Leonardo da Vinci.
+Michelangelo was considered the greatest living artist in his lifetime, and since has been held to be one of the greatest artists of all time.[1] A number of his works in painting, sculpture, and architecture rank among the most famous in existence.[1] His output in every field during his long life was prodigious; when the sheer volume of correspondence, sketches, and reminiscences that survive is also taken into account, he is the best-documented artist of the 16th century.</string>
+</resources>
