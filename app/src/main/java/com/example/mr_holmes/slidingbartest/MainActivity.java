@@ -12,8 +12,11 @@ package com.example.mr_holmes.slidingbartest;
         import android.view.MenuItem;
         import android.view.View;
         import android.view.View.OnClickListener;
+        import android.view.animation.Animation;
+        import android.view.animation.AnimationUtils;
         import android.widget.Button;
         import android.widget.TextView;
+        import android.widget.SearchView;
 
         import com.sothree.slidinguppanel.SlidingUpPanelLayout;
         import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
@@ -24,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
 
     private SlidingUpPanelLayout mLayout;
+    private SearchView mSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,12 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //setSupportActionBar((Toolbar)findViewById(R.id.main_toolbar)); setta la barra del titolo, per adesso non serve
-
-
+        mSearch = (SearchView) findViewById(R.id.search_view);
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setAnchorPoint(0.6f);
+
+        final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         mLayout.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -46,18 +52,28 @@ public class MainActivity extends ActionBarActivity {
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
                 //inserire qui la funzione che cambia colore della barra
-
+                mSearch.startAnimation(fadeOut);
+                mSearch.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onPanelCollapsed(View panel) {
                 Log.i(TAG, "onPanelCollapsed");
-
+                if(mSearch.getVisibility()!= View.VISIBLE) {
+                    mSearch.startAnimation(fadeIn);
+                    mSearch.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onPanelAnchored(View panel) {
                 Log.i(TAG, "onPanelAnchored");
+                if(mSearch.getVisibility()!= View.VISIBLE)
+                {
+                    mSearch.startAnimation(fadeIn);
+                    mSearch.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
