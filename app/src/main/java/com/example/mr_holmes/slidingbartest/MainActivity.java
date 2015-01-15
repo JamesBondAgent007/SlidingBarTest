@@ -1,12 +1,8 @@
 package com.example.mr_holmes.slidingbartest;
 
-        import android.content.Intent;
-        import android.net.Uri;
         import android.os.Bundle;
         import android.support.v7.app.ActionBarActivity;
-        import android.support.v7.widget.Toolbar;
         import android.text.Html;
-        import android.text.method.LinkMovementMethod;
         import android.util.Log;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -14,13 +10,11 @@ package com.example.mr_holmes.slidingbartest;
         import android.view.View.OnClickListener;
         import android.view.animation.Animation;
         import android.view.animation.AnimationUtils;
-        import android.widget.Button;
         import android.widget.TextView;
         import android.widget.SearchView;
 
         import com.sothree.slidinguppanel.SlidingUpPanelLayout;
         import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-        import com.example.mr_holmes.slidingbartest.R;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -28,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
     private SlidingUpPanelLayout mLayout;
     private SearchView mSearch;
+    private boolean fadeOutAnimationStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,38 +37,50 @@ public class MainActivity extends ActionBarActivity {
 
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+
         mLayout.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+
+                if(slideOffset>=0.8) {
+
+                    if (fadeOutAnimationStarted != true) {
+                        mSearch.startAnimation(fadeOut);
+                        mSearch.setVisibility(View.INVISIBLE);
+                        fadeOutAnimationStarted = true;
+                    }
+                }
+                else if(slideOffset<=0.75) {
+                    if(fadeOutAnimationStarted != false) {
+                        if (mSearch.getVisibility() != View.VISIBLE) {
+                            mSearch.startAnimation(fadeIn);
+                            mSearch.setVisibility(View.VISIBLE);
+                            fadeOutAnimationStarted = false;
+                        }
+                    }
+                }
+
             }
+
+
 
             @Override
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
                 //inserire qui la funzione che cambia colore della barra
-                mSearch.startAnimation(fadeOut);
-                mSearch.setVisibility(View.INVISIBLE);
+//                mSearch.startAnimation(fadeOut);
+//                mSearch.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onPanelCollapsed(View panel) {
                 Log.i(TAG, "onPanelCollapsed");
-                if(mSearch.getVisibility()!= View.VISIBLE) {
-                    mSearch.startAnimation(fadeIn);
-                    mSearch.setVisibility(View.VISIBLE);
-                }
-            }
 
+            }
             @Override
             public void onPanelAnchored(View panel) {
                 Log.i(TAG, "onPanelAnchored");
-                if(mSearch.getVisibility()!= View.VISIBLE)
-                {
-                    mSearch.startAnimation(fadeIn);
-                    mSearch.setVisibility(View.VISIBLE);
-                }
-
             }
 
             @Override
