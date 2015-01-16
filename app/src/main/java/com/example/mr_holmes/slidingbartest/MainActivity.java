@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
         mSearch = (SearchView) findViewById(R.id.search_view);
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setAnchorPoint(0.6f);
-
+        
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
@@ -69,8 +69,6 @@ public class MainActivity extends ActionBarActivity {
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
                 //inserire qui la funzione che cambia colore della barra
-//                mSearch.startAnimation(fadeOut);
-//                mSearch.setVisibility(View.INVISIBLE);
             }
 
             @Override
