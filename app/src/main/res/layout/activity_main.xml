@@ -76,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@android:color/white"
+                    android:id="@+id/slidingBarBg"
                     > <!--Questo è il colore che deve cambiare-->
 
 

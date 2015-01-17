@@ -1,8 +1,8 @@
 package com.example.mr_holmes.slidingbartest;
 
+        import android.animation.ObjectAnimator;
         import android.os.Bundle;
         import android.support.v7.app.ActionBarActivity;
-        import android.text.Html;
         import android.util.Log;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -10,6 +10,7 @@ package com.example.mr_holmes.slidingbartest;
         import android.view.View.OnClickListener;
         import android.view.animation.Animation;
         import android.view.animation.AnimationUtils;
+        import android.widget.RelativeLayout;
         import android.widget.TextView;
         import android.widget.SearchView;
 
@@ -21,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
 
+    private RelativeLayout mSlidingBarBg;
     private SlidingUpPanelLayout mLayout;
     private SearchView mSearch;
     private FloatingActionButton mButton;
@@ -37,7 +39,8 @@ public class MainActivity extends ActionBarActivity {
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setAnchorPoint(0.6f);
         mButton = (FloatingActionButton) findViewById(R.id.pink_icon);
-        
+        mSlidingBarBg = (RelativeLayout) findViewById(R.id.slidingBarBg);
+
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
@@ -54,6 +57,13 @@ public class MainActivity extends ActionBarActivity {
                         mButton.startAnimation(fadeOut);
                         mButton.setVisibility(View.INVISIBLE);
                         fadeOutAnimationStarted = true;
+                       // mDragView.setBackgroundColor(Color.RED);
+
+
+                        BackgroundColorChangerHSV colorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0 );
+                        ObjectAnimator anim = ObjectAnimator.ofFloat(colorChanger, "saturation", 0, 1);
+                        anim.setDuration(1000);
+                        anim.start();
                     }
                 }
                 else if(slideOffset<=0.75) {
@@ -64,6 +74,12 @@ public class MainActivity extends ActionBarActivity {
                             mButton.startAnimation(fadeIn);
                             mButton.setVisibility(View.VISIBLE);
                             fadeOutAnimationStarted = false;
+
+                            BackgroundColorChangerHSV colorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0 );
+                            ObjectAnimator anim = ObjectAnimator.ofFloat(colorChanger, "saturation", 1, 0);
+                            anim.setDuration(1000);
+                            anim.start();
+
                         }
                     }
                 }
