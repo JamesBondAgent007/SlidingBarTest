@@ -13,6 +13,7 @@ package com.example.mr_holmes.slidingbartest;
         import android.widget.TextView;
         import android.widget.SearchView;
 
+        import com.getbase.floatingactionbutton.FloatingActionButton;
         import com.sothree.slidinguppanel.SlidingUpPanelLayout;
         import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
@@ -22,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 
     private SlidingUpPanelLayout mLayout;
     private SearchView mSearch;
+    private FloatingActionButton mButton;
     private boolean fadeOutAnimationStarted = false;
 
     @Override
@@ -34,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
         mSearch = (SearchView) findViewById(R.id.search_view);
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setAnchorPoint(0.6f);
+        mButton = (FloatingActionButton) findViewById(R.id.pink_icon);
         
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
@@ -48,6 +51,8 @@ public class MainActivity extends ActionBarActivity {
                     if (fadeOutAnimationStarted != true) {
                         mSearch.startAnimation(fadeOut);
                         mSearch.setVisibility(View.INVISIBLE);
+                        mButton.startAnimation(fadeOut);
+                        mButton.setVisibility(View.INVISIBLE);
                         fadeOutAnimationStarted = true;
                     }
                 }
@@ -56,6 +61,8 @@ public class MainActivity extends ActionBarActivity {
                         if (mSearch.getVisibility() != View.VISIBLE) {
                             mSearch.startAnimation(fadeIn);
                             mSearch.setVisibility(View.VISIBLE);
+                            mButton.startAnimation(fadeIn);
+                            mButton.setVisibility(View.VISIBLE);
                             fadeOutAnimationStarted = false;
                         }
                     }
@@ -94,9 +101,6 @@ public class MainActivity extends ActionBarActivity {
                 mLayout.collapsePanel();
             }
         });
-
-        t = (TextView) findViewById(R.id.name);
-        t.setText(Html.fromHtml(getString(R.string.hello)));
 
     }
 

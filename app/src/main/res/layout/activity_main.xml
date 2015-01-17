@@ -7,18 +7,6 @@
     tools:context=".MainActivity">
 
 
-    <!--è la barra del titolo, per adesso non ci serve, mettere una searchbar invece-->
-    <!--<android.support.v7.widget.Toolbar
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/main_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        sothree:theme="@style/ActionBar"/>-->
-
-
-
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
@@ -26,7 +14,7 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         sothree:panelHeight="48dp"
-        sothree:shadowHeight="4dp"
+        sothree:shadowHeight="0dp"
         sothree:paralaxOffset="100dp"
         sothree:dragView="@+id/dragView"
         android:clipChildren="false" >
@@ -58,8 +46,6 @@
                 android:background="@color/dim_foreground_disabled_material_dark"
             />
 
-
-
         </FrameLayout>
 
 
@@ -73,18 +59,17 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="false"
-
             >
 
 
-
-
-            <!--Questa è la barra che deve cambiare colore una volta tirata su-->
+            <!--Questa è la barra dello slider-->
             <LinearLayout
                 android:id="@+id/slidingBar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal">
+                <!--android:layout_height deve cambiare col android:layout_height del RelativeLayout qui sotto
+                nell'animazione a schermo intero-->
 
                 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
@@ -93,47 +78,16 @@
                     android:background="@android:color/white"
                     > <!--Questo è il colore che deve cambiare-->
 
-                    <!--ci va un imageButton caricando un png (vedi le varie librerie per l'implementazione del FAB), questo è temporaneo-->
-                    <!--
-                        <Button
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:text="Go"
-                        android:id="@+id/button"
-                        android:layout_gravity="center"
-                        android:background="@drawable/layout_corners_test"
-                        android:layout_marginRight="8dp"
-                        android:layout_alignParentRight="true"
-                    />
-                    -->
-
-
-                    <TextView
-                    android:id="@+id/name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="14sp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:height="68dp"/>
-
 
                     <com.example.mr_holmes.slidingbartest.DiscreteSeekBar
                         android:id="@+id/seekBar"
                         android:layout_width="match_parent"
-                        android:layout_marginEnd="90dp"
+                        android:layout_marginEnd="80dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        app:dsb_min="2"
+                        app:dsb_min="1"
                         app:dsb_max="15"
                     />
-
-
-
-
-
-
 
 
                 </RelativeLayout>
@@ -146,16 +100,12 @@
                 android:id="@+id/pink_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="-70dp"
+                android:layout_marginStart="275dp"
+                android:layout_marginTop="-75dp"
                 fab:fab_icon="@drawable/ic_fab_star"
                 fab:fab_colorNormal="@color/pink"
                 fab:fab_colorPressed="@color/pink_pressed"
-                />
-
+            />
 
 
             <ScrollView
@@ -180,36 +130,10 @@
             </ScrollView>
 
 
-
-
         </LinearLayout>
 
 
-        <!--
-        <com.shamanland.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignBottom="@id/main"
-            android:layout_marginBottom="-32dp"
-            android:layout_marginRight="20dp"
-
-            android:src="@drawable/ic_action_my"
-            app:floatingActionButtonColor="@color/my_fab_color"
-            app:floatingActionButtonSize="mini"
-            />
-        -->
-
-
-
-
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
-
-
-
-
-
 
 
     <SearchView
