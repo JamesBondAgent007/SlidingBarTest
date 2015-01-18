@@ -1,4 +1,4 @@
-package com.example.mr_holmes.slidingbartest;
+package com.example.mr_holmes.slidingbartest.animationHelper;
 
 import android.graphics.Color;
 import android.view.View;
@@ -54,21 +54,21 @@ public class BackgroundColorChangerHSV
 
     public void setHue(float hue)
     {
-        float newHsv[] = this.hsv;
+        float newHsv[] = this.hsv.clone();
         newHsv[0] = hue;
         view.setBackgroundColor(Color.HSVToColor(newHsv) );
     }
 
     public void setSaturation(float sat)
     {
-        float newHsv[] = this.hsv;
+        float newHsv[] = this.hsv.clone();
         newHsv[1] = sat;
         view.setBackgroundColor(Color.HSVToColor(newHsv) );
     }
 
     public void setValue(float value)
     {
-        float newHsv[] = this.hsv;
+        float newHsv[] = this.hsv.clone();
         newHsv[2] = value;
         view.setBackgroundColor(Color.HSVToColor(newHsv) );
     }

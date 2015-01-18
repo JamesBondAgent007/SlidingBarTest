@@ -1,97 +1,205 @@
 package com.example.mr_holmes.slidingbartest;
 
-        import android.animation.ObjectAnimator;
-        import android.os.Bundle;
-        import android.support.v7.app.ActionBarActivity;
-        import android.util.Log;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.View.OnClickListener;
-        import android.view.animation.Animation;
-        import android.view.animation.AnimationUtils;
-        import android.widget.RelativeLayout;
-        import android.widget.TextView;
-        import android.widget.SearchView;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.SearchView;
 
-        import com.getbase.floatingactionbutton.FloatingActionButton;
-        import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-        import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.example.mr_holmes.slidingbartest.animationHelper.BackgroundColorChangerHSV;
+import com.example.mr_holmes.slidingbartest.animationHelper.DpHelper;
+import com.example.mr_holmes.slidingbartest.animationHelper.LayoutDimensionChanger;
+import com.example.mr_holmes.slidingbartest.animationHelper.MarginChanger;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
+    private DpHelper dpHelper;
 
+
+    private Context context;
+
+
+
+// * * * * * * * * * * * * COSTANTI (evitiamo i numeri magici) * * * * * * * * * * * * * * * * * *
+    final float ANCHOR_POINT = 0.5f;
+    final int SLIDING_BAR_EXPANDED_HEIGHT_DP = 120;
+    final int SLIDING_BAR_HEIGHT_DP = 48;
+    final int SEARCH_BAR_PADDING_DP = 8;
+    final  int SEARCH_BAR_HIDED_PADDING_DP = -60;
+
+
+
+
+
+// * * * * * * * * * * * *  DEFINIZIONE E INIZIALIZZAZIONE LAYOUT * * * * * * * * * * * * * * * * *
     private RelativeLayout mSlidingBarBg;
-    private SlidingUpPanelLayout mLayout;
+    private LinearLayout mSlidingBar;
+    private SlidingUpPanelLayout mSlidingUpPanelLayout;
+    private TextView t;
+    private ScrollView scrollView;
+
     private SearchView mSearch;
     private FloatingActionButton mButton;
     private boolean fadeOutAnimationStarted = false;
+    private boolean colorAnimationStarted = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
-
+    private void initActivityAndXML()
+    {
+    // FIND VIEW BY ID * * * * * * * * * * * * * * * * * * * * * * * *
         //setSupportActionBar((Toolbar)findViewById(R.id.main_toolbar)); setta la barra del titolo, per adesso non serve
         mSearch = (SearchView) findViewById(R.id.search_view);
-        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        mLayout.setAnchorPoint(0.6f);
+        mSlidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mButton = (FloatingActionButton) findViewById(R.id.pink_icon);
         mSlidingBarBg = (RelativeLayout) findViewById(R.id.slidingBarBg);
+        mSlidingBar = (LinearLayout) findViewById(R.id.slidingBar);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        TextView t = (TextView) findViewById(R.id.main);
 
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
-        mLayout.setPanelSlideListener(new PanelSlideListener() {
+
+
+    // INIT * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        mSlidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
+        mSlidingUpPanelLayout.setDragView(mSlidingBarBg);
+        // sliding avviene solo se si scrolla sulla slidingBar e non se si scrolla il contenuto
+
+
+    }
+
+
+
+
+    public void initEventListeners()
+    {
+
+        mSlidingUpPanelLayout.setPanelSlideListener(new PanelSlideListener() {
+
+
+            SlidingBarExtensionAnimationManager slidingBarHeightAnimMan = new SlidingBarExtensionAnimationManager(mSlidingBar, mSlidingBarBg, context);
+            ObjectAnimator slidingBarHeightAnimation;
+
+            BackgroundColorChangerHSV slidingBarColorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0);
+            ObjectAnimator slidingBarColorAnimation;
+
+//            MarginChanger marginChanger = new MarginChanger((RelativeLayout.MarginLayoutParams) mSearch.getLayoutParams());
+//            ObjectAnimator searchBarAnimation;
+
+
+
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+                resizeScrollView(1-slideOffset);
 
-                if(slideOffset>=0.8) {
+                if (slideOffset >= 0.9) {
+                    if (colorAnimationStarted != true) {
+                        slidingBarHeightAnimation = ObjectAnimator.ofInt(slidingBarHeightAnimMan, "dpHeight", SLIDING_BAR_HEIGHT_DP, SLIDING_BAR_EXPANDED_HEIGHT_DP);
+                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.start();
 
-                    if (fadeOutAnimationStarted != true) {
-                        mSearch.startAnimation(fadeOut);
-                        mSearch.setVisibility(View.INVISIBLE);
-                        mButton.startAnimation(fadeOut);
-                        mButton.setVisibility(View.INVISIBLE);
-                        fadeOutAnimationStarted = true;
-                       // mDragView.setBackgroundColor(Color.RED);
-
-
-                        BackgroundColorChangerHSV colorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0 );
-                        ObjectAnimator anim = ObjectAnimator.ofFloat(colorChanger, "saturation", 0, 1);
-                        anim.setDuration(1000);
-                        anim.start();
+                        slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", 0, slidingBarColorChanger.getS());
+                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.start();
+                        colorAnimationStarted = true;
                     }
                 }
-                else if(slideOffset<=0.75) {
-                    if(fadeOutAnimationStarted != false) {
-                        if (mSearch.getVisibility() != View.VISIBLE) {
-                            mSearch.startAnimation(fadeIn);
-                            mSearch.setVisibility(View.VISIBLE);
-                            mButton.startAnimation(fadeIn);
-                            mButton.setVisibility(View.VISIBLE);
-                            fadeOutAnimationStarted = false;
 
-                            BackgroundColorChangerHSV colorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0 );
-                            ObjectAnimator anim = ObjectAnimator.ofFloat(colorChanger, "saturation", 1, 0);
-                            anim.setDuration(1000);
-                            anim.start();
+                if (slideOffset <= 0.87) {
+                    if (colorAnimationStarted != false) {
+                        slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", slidingBarColorChanger.getS(), 0);
+                        slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", slidingBarColorChanger.getS(), 0);
+                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.start();
 
-                        }
+                        slidingBarHeightAnimation = ObjectAnimator.ofInt(slidingBarHeightAnimMan, "dpHeight", SLIDING_BAR_EXPANDED_HEIGHT_DP, SLIDING_BAR_HEIGHT_DP);
+                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.start();
+                        colorAnimationStarted = false;
+                    }
+                }
+
+
+                if (slideOffset >= 0.4) {
+
+                    if (fadeOutAnimationStarted == false)
+                    {
+
+                        Animation a = new Animation() {
+                            @Override
+                            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mSearch.getLayoutParams();
+                                params.topMargin = DpHelper.dpToPx(SEARCH_BAR_PADDING_DP, context) + (int) (dpHelper.dpToPx(SEARCH_BAR_HIDED_PADDING_DP) * interpolatedTime);
+                                mSearch.setLayoutParams(params);
+                            }
+                        };
+                        a.setDuration(200);
+                        mSearch.startAnimation(a);
+
+                        fadeOutAnimationStarted = true;
+
+                         /*
+                            SOSTITUITO COL CODICE SOPRA, NON SO PERCHÈ QUESTO NON FUNZIONA BENE:
+                             animMargin = ObjectAnimator.ofInt(marginChanger, "topMargin", DpHelper.dpToPx(8, context), DpHelper.dpToPx(60, context));
+                             animMargin.setDuration(1000);
+                             animMargin.start();
+                         */
+
+
+                    }
+                }
+                else if (slideOffset <= 0.3)
+                {
+                    if (fadeOutAnimationStarted == true)
+                    {
+                        Animation a = new Animation() {
+                            @Override
+                            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mSearch.getLayoutParams();
+                                params.topMargin = dpHelper.dpToPx(SEARCH_BAR_PADDING_DP) + (int) (dpHelper.dpToPx(SEARCH_BAR_HIDED_PADDING_DP) * (1 - interpolatedTime));
+                                mSearch.setLayoutParams(params);
+                            }
+                        };
+                        a.setDuration(200);
+                        mSearch.startAnimation(a);
+                        fadeOutAnimationStarted = false;
+
+
+                        /*
+                           SOSTITUITO COL CODICE SOPRA, NON SO PERCHÈ QUEST NON FUNZIONA BENE:
+                            marginChanger = new MarginChanger((RelativeLayout.MarginLayoutParams)mSearch.getLayoutParams() );
+                            animMargin = ObjectAnimator.ofInt(marginChanger, "topMargin", DpHelper.dpToPx(60, context), DpHelper.dpToPx(8, context));
+                            animMargin.setDuration(1000);
+                            animMargin.start();
+                        */
                     }
                 }
 
             }
 
 
-
             @Override
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
-                //inserire qui la funzione che cambia colore della barra
+                resizeScrollView(0.0f);
             }
 
             @Override
@@ -99,9 +207,11 @@ public class MainActivity extends ActionBarActivity {
                 Log.i(TAG, "onPanelCollapsed");
 
             }
+
             @Override
             public void onPanelAnchored(View panel) {
                 Log.i(TAG, "onPanelAnchored");
+                resizeScrollView(ANCHOR_POINT);
             }
 
             @Override
@@ -110,23 +220,99 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        TextView t = (TextView) findViewById(R.id.main);
-        t.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLayout.collapsePanel();
-            }
-        });
+
+
+
+
+
+
+
+
 
     }
+
+
+
+
+
+
+
+
+// * * * * * * * * * * * * FUNZIONI PRIVATE (UTILITY / HELPER) * * * * * * * * * * * * * * * * * *
+
+    private void resizeScrollView(final float slideOffset) {
+        // The scrollViewHeight calculation would need to change based on what views are
+        // in the sliding panel. The calculation below works because the layout has
+        // 2 views. 1) The row with the drag view which is layout.getPanelHeight() high.
+        // 2) The ScrollView.
+
+        if( slideOffset == 0.0f)
+        {
+            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            scrollView.setLayoutParams(params);
+        }
+        else
+        {
+            final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
+            final ViewGroup.LayoutParams currentLayoutParams = scrollView.getLayoutParams();
+            currentLayoutParams.height = scrollViewHeight;
+            scrollView.setLayoutParams(currentLayoutParams);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// * * * * * * * * * * * * * * *  EVENT MANAGER DELLA ACTIVITY * * * * * * * * * * * * * * *
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        this.context = this;
+        dpHelper = new DpHelper(this);
+
+        initActivityAndXML();
+        initEventListeners();
+
+
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_toggle);
-        if (mLayout != null) {
-            if (mLayout.isPanelHidden()) {
+        if (mSlidingUpPanelLayout != null) {
+            if (mSlidingUpPanelLayout.isPanelHidden()) {
                 item.setTitle(R.string.action_show);
             } else {
                 item.setTitle(R.string.action_hide);
@@ -144,26 +330,26 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_toggle: {
-                if (mLayout != null) {
-                    if (!mLayout.isPanelHidden()) {
-                        mLayout.hidePanel();
+                if (mSlidingUpPanelLayout != null) {
+                    if (!mSlidingUpPanelLayout.isPanelHidden()) {
+                        mSlidingUpPanelLayout.hidePanel();
                         item.setTitle(R.string.action_show);
                     } else {
-                        mLayout.showPanel();
+                        mSlidingUpPanelLayout.showPanel();
                         item.setTitle(R.string.action_hide);
                     }
                 }
                 return true;
             }
             case R.id.action_anchor: {
-                if (mLayout != null) {
-                    if (mLayout.getAnchorPoint() == 1.0f) {
-                        mLayout.setAnchorPoint(0.7f);
-                        mLayout.expandPanel(0.7f);
+                if (mSlidingUpPanelLayout != null) {
+                    if (mSlidingUpPanelLayout.getAnchorPoint() == 1.0f) {
+                        mSlidingUpPanelLayout.setAnchorPoint(0.7f);
+                        mSlidingUpPanelLayout.expandPanel(0.7f);
                         item.setTitle(R.string.action_anchor_enable);
                     } else {
-                        mLayout.setAnchorPoint(1.0f);
-                        mLayout.collapsePanel();
+                        mSlidingUpPanelLayout.setAnchorPoint(1.0f);
+                        mSlidingUpPanelLayout.collapsePanel();
                         item.setTitle(R.string.action_anchor_disable);
                     }
                 }
@@ -175,10 +361,37 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (mLayout != null && mLayout.isPanelExpanded() || mLayout.isPanelAnchored()) {
-            mLayout.collapsePanel();
+        if (mSlidingUpPanelLayout != null && mSlidingUpPanelLayout.isPanelExpanded() || mSlidingUpPanelLayout.isPanelAnchored()) {
+            mSlidingUpPanelLayout.collapsePanel();
         } else {
             super.onBackPressed();
         }
+    }
+
+
+}
+
+
+
+
+
+// HELPER PER ANIMAZIONE
+class SlidingBarExtensionAnimationManager {
+
+    LayoutDimensionChanger c1;
+    LayoutDimensionChanger c2;
+    SlidingUpPanelLayout v3;
+    Context context;
+
+    SlidingBarExtensionAnimationManager(ViewGroup v1, ViewGroup v2, Context context)
+    {
+        this.c1 = new LayoutDimensionChanger(v1, context);
+        this.c2 = new LayoutDimensionChanger(v2, context);
+        this.context = context;
+    }
+    public void setDpHeight(int dpHeight)
+    {
+        c1.setDpHeight(dpHeight);
+        c2.setDpHeight(dpHeight);
     }
 }

@@ -32,6 +32,20 @@
             android:orientation="vertical"
             >
 
+
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/search_view"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/layout_searchbar_corners"
+                />
+
+
+
             <!--FrameLayout ha solo un elemento, qui ci va la mappa-->
             <TextView
                 android:id="@+id/main"
@@ -67,7 +81,8 @@
                 android:id="@+id/slidingBar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
                 <!--android:layout_height deve cambiare col android:layout_height del RelativeLayout qui sotto
                 nell'animazione a schermo intero-->
 
@@ -114,19 +129,12 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/scrollView">
 
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/card_view"
-                    android:layout_gravity="top"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/info_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/testo"/>
-                </android.support.v7.widget.CardView>
 
             </ScrollView>
 
@@ -136,16 +144,5 @@
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_view"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/layout_searchbar_corners"
-    />
 
 </RelativeLayout>
