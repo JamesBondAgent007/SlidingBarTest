@@ -54,7 +54,6 @@ public class MainActivity extends ActionBarActivity {
     private SlidingUpPanelLayout mSlidingUpPanelLayout;
     private TextView t;
     private ScrollView scrollView;
-
     private SearchView mSearch;
     private FloatingActionButton mButton;
     private boolean fadeOutAnimationStarted = false;
@@ -110,10 +109,10 @@ public class MainActivity extends ActionBarActivity {
                 Log.i(TAG, "onPanelSlide, offset " + slideOffset);
                 resizeScrollView(1-slideOffset);
 
-                if (slideOffset >= 0.9) {
+                if (slideOffset >= 0.7) {
                     if (colorAnimationStarted != true) {
                         slidingBarHeightAnimation = ObjectAnimator.ofInt(slidingBarHeightAnimMan, "dpHeight", SLIDING_BAR_HEIGHT_DP, SLIDING_BAR_EXPANDED_HEIGHT_DP);
-                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.setDuration(200);
                         slidingBarHeightAnimation.start();
 
                         slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", 0, slidingBarColorChanger.getS());
@@ -123,11 +122,11 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
 
-                if (slideOffset <= 0.87) {
+                if (slideOffset <= 0.67) {
                     if (colorAnimationStarted != false) {
                         slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", slidingBarColorChanger.getS(), 0);
                         slidingBarHeightAnimation = ObjectAnimator.ofFloat(slidingBarColorChanger, "saturation", slidingBarColorChanger.getS(), 0);
-                        slidingBarHeightAnimation.setDuration(500);
+                        slidingBarHeightAnimation.setDuration(200);
                         slidingBarHeightAnimation.start();
 
                         slidingBarHeightAnimation = ObjectAnimator.ofInt(slidingBarHeightAnimMan, "dpHeight", SLIDING_BAR_EXPANDED_HEIGHT_DP, SLIDING_BAR_HEIGHT_DP);
