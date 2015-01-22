@@ -113,8 +113,10 @@
             </LinearLayout>
 
 
+
+
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/pink_icon"
+                android:id="@+id/nav_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="275dp"
@@ -125,19 +127,12 @@
             />
 
 
-            <ScrollView
+            <!--<ListView
+                android:id="@+id/list_container_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/scrollView">
+                android:layout_height="match_parent">
+            </ListView>-->
 
-
-                    <TextView
-                        android:id="@+id/info_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/testo"/>
-
-            </ScrollView>
 
 
         </LinearLayout>

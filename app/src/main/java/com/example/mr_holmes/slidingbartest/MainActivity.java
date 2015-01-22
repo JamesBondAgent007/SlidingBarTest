@@ -2,18 +2,20 @@ package com.example.mr_holmes.slidingbartest;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,7 +24,6 @@ import android.widget.SearchView;
 import com.example.mr_holmes.slidingbartest.animationHelper.BackgroundColorChangerHSV;
 import com.example.mr_holmes.slidingbartest.animationHelper.DpHelper;
 import com.example.mr_holmes.slidingbartest.animationHelper.LayoutDimensionChanger;
-import com.example.mr_holmes.slidingbartest.animationHelper.MarginChanger;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
@@ -31,8 +32,6 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
     private DpHelper dpHelper;
-
-
     private Context context;
 
 
@@ -45,9 +44,6 @@ public class MainActivity extends ActionBarActivity {
     final  int SEARCH_BAR_HIDED_PADDING_DP = -60;
 
 
-
-
-
 // * * * * * * * * * * * *  DEFINIZIONE E INIZIALIZZAZIONE LAYOUT * * * * * * * * * * * * * * * * *
     private RelativeLayout mSlidingBarBg;
     private LinearLayout mSlidingBar;
@@ -58,6 +54,9 @@ public class MainActivity extends ActionBarActivity {
     private FloatingActionButton mButton;
     private boolean fadeOutAnimationStarted = false;
     private boolean colorAnimationStarted = false;
+    private ListView museumList;
+    private LinearLayout dragView;
+
 
     private void initActivityAndXML()
     {
@@ -65,10 +64,12 @@ public class MainActivity extends ActionBarActivity {
         //setSupportActionBar((Toolbar)findViewById(R.id.main_toolbar)); setta la barra del titolo, per adesso non serve
         mSearch = (SearchView) findViewById(R.id.search_view);
         mSlidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        mButton = (FloatingActionButton) findViewById(R.id.pink_icon);
+        //mSlidingUpPanelLayout.setEnableDragViewTouchEvents(true);
+
+
+        mButton = (FloatingActionButton) findViewById(R.id.nav_button);
         mSlidingBarBg = (RelativeLayout) findViewById(R.id.slidingBarBg);
         mSlidingBar = (LinearLayout) findViewById(R.id.slidingBar);
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
         TextView t = (TextView) findViewById(R.id.main);
 
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
@@ -85,17 +86,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
-
     public void initEventListeners()
     {
 
-        mSlidingUpPanelLayout.setPanelSlideListener(new PanelSlideListener() {
+         mSlidingUpPanelLayout.setPanelSlideListener(new PanelSlideListener() {
 
 
             SlidingBarExtensionAnimationManager slidingBarHeightAnimMan = new SlidingBarExtensionAnimationManager(mSlidingBar, mSlidingBarBg, context);
             ObjectAnimator slidingBarHeightAnimation;
-
             BackgroundColorChangerHSV slidingBarColorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0);
             ObjectAnimator slidingBarColorAnimation;
 
@@ -107,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 Log.i(TAG, "onPanelSlide, offset " + slideOffset);
-                resizeScrollView(1-slideOffset);
+                //resizeScrollView(1-slideOffset); <-- Da richiamare da file esterno
 
                 if (slideOffset >= 0.7) {
                     if (colorAnimationStarted != true) {
@@ -198,7 +196,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
-                resizeScrollView(0.0f);
+                //resizeScrollView(0.0f); <-- da richiamare da altro file
             }
 
             @Override
@@ -210,7 +208,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onPanelAnchored(View panel) {
                 Log.i(TAG, "onPanelAnchored");
-                resizeScrollView(ANCHOR_POINT);
+                //resizeScrollView(ANCHOR_POINT);
             }
 
             @Override
@@ -220,68 +218,43 @@ public class MainActivity extends ActionBarActivity {
         });
 
 
-
-
-
-
-
-
-
+        mButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v)
+            {
+                Intent to2ndActivity = new Intent(MainActivity.this, SampleListView.class);
+                startActivity(to2ndActivity);
+            }
+        });
 
     }
-
-
-
-
-
 
 
 
 // * * * * * * * * * * * * FUNZIONI PRIVATE (UTILITY / HELPER) * * * * * * * * * * * * * * * * * *
 
-    private void resizeScrollView(final float slideOffset) {
-        // The scrollViewHeight calculation would need to change based on what views are
-        // in the sliding panel. The calculation below works because the layout has
-        // 2 views. 1) The row with the drag view which is layout.getPanelHeight() high.
-        // 2) The ScrollView.
-
-        if( slideOffset == 0.0f)
-        {
-            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            scrollView.setLayoutParams(params);
-        }
-        else
-        {
-            final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
-            final ViewGroup.LayoutParams currentLayoutParams = scrollView.getLayoutParams();
-            currentLayoutParams.height = scrollViewHeight;
-            scrollView.setLayoutParams(currentLayoutParams);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//    private void resizeScrollView(final float slideOffset) {
+//        // The scrollViewHeight calculation would need to change based on what views are
+//        // in the sliding panel. The calculation below works because the layout has
+//        // 2 views. 1) The row with the drag view which is layout.getPanelHeight() high.
+//        // 2) The ScrollView.
+//
+//        if( slideOffset == 0.0f)
+//        {
+//            ViewGroup.LayoutParams params = museumList.getLayoutParams();
+//            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//            museumList.setLayoutParams(params);
+//        }
+//        else
+//        {
+//            final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
+//            final ViewGroup.LayoutParams currentLayoutParams = museumList.getLayoutParams();
+//            currentLayoutParams.height = scrollViewHeight;
+//            museumList.setLayoutParams(currentLayoutParams);
+//        }
+//
+//            //final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
+//
+//    }
 
 
 
@@ -301,9 +274,6 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -369,9 +339,6 @@ public class MainActivity extends ActionBarActivity {
 
 
 }
-
-
-
 
 
 // HELPER PER ANIMAZIONE
