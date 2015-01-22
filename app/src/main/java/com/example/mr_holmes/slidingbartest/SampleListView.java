@@ -10,19 +10,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.mr_holmes.slidingbartest.ListAdapter;
+import com.example.mr_holmes.slidingbartest.SampleListItem;
+
 /**
  * Created by Mr_Holmes on 21/01/15.
  */
 public class SampleListView extends Activity {
 
-
-    //dato di prova
-    public class Description
-    {
-       String description;
-    }
-
-    ListAdapter listAdapter;
+    ListView listView;
+    List<SampleListItem> sampleListItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,33 +27,18 @@ public class SampleListView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_list_view);
 
-        listAdapter = new ListAdapter();
-        ListView descriptionList = (ListView) findViewById(R.id.descriptionList);
-        descriptionList.setAdapter(this.listAdapter);
-
-        descriptionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Description description = listAdapter.getDescription(position);
-                Toast.makeText(SampleListView.this, description.description, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public List<Description> getDataForListView(){
-
-        List<Description> descriptionList = new ArrayList<Description>();
-
-        for(int i = 0; i < 10; i++)
+        sampleListItems = new ArrayList<SampleListItem>();
+        for(int i = 0; i < 20; i++)
         {
-            Description description = new Description();
-            description.description = "Description number " + i;
-            descriptionList.add(description);
+            String str = new String();
+            str = "Description number " + i;
+            SampleListItem item = new SampleListItem(R.drawable.graphic, str);
+            sampleListItems.add(item);
         }
 
-        return descriptionList;
-
+        listView = (ListView) findViewById(R.id.descriptionList);
+        ListAdapter adapter = new ListAdapter(this, sampleListItems);
+        listView.setAdapter(adapter);
     }
-
 
 }
