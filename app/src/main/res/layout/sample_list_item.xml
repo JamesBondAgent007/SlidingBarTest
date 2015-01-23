@@ -10,8 +10,7 @@
         android:layout_height="56dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-
-        android:src="@drawable/graphic" />
+        android:src="@drawable/graphic"/>
 
 
     <TextView

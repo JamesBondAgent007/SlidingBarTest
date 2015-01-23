@@ -35,7 +35,7 @@
             android:label="@string/title_activity_main_activity2">
         </activity>
         <activity
-            android:name=".SampleListView"
+            android:name=".listTest.SampleListView"
             android:label="@string/title_activity_sample_list_view">
         </activity>
     </application>

@@ -1,34 +1,27 @@
-package com.example.mr_holmes.slidingbartest;
+package com.example.mr_holmes.slidingbartest.listTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.mr_holmes.slidingbartest.SampleListView;
-import com.example.mr_holmes.slidingbartest.SampleListItem;
+import com.example.mr_holmes.slidingbartest.R;
+
 /**
- * Created by Mr_Holmes on 21/01/15.
- */
+* Created by Mr_Holmes on 21/01/15.
+*/
 public class ListAdapter extends BaseAdapter {
 
     Context context;
-    List<SampleListItem> SampleList;
+    List<SampleListItem> SampleList; //lista di oggetti base della lista (sono questi che si possono modificare a piacimento)
 
+    //questa classe andrà portata fuori e chiaramente cambia a seconda del layout
     private class ViewHolder
     {
         ImageView _image;
@@ -48,9 +41,9 @@ public class ListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.sample_list_item, null);
             holder = new ViewHolder();
-            holder._txt = (TextView) convertView.findViewById(R.id.txt);
-            holder._image = (ImageView) convertView.findViewById(R.id.listImage);
-            convertView.setTag(holder);
+            holder._txt = (TextView) convertView.findViewById(R.id.txt);            //Questa parte di codice andrebbe resa più flessibile
+            holder._image = (ImageView) convertView.findViewById(R.id.listImage);   //basterebbe fare un metodo che prende viewHolder
+            convertView.setTag(holder);                                             //come parametro e setta la roba a seconda del tipo di holder
         }
         else {
             holder = (ViewHolder) convertView.getTag();
@@ -58,10 +51,11 @@ public class ListAdapter extends BaseAdapter {
 
         SampleListItem sampleListItemItem = (SampleListItem) getItem(position);
 
-        holder._txt.setText(sampleListItemItem.getDescription());
+        holder._txt.setText(sampleListItemItem.getDescription());       //Anche questa parte deve diventare più flessibile
         holder._image.setImageResource(sampleListItemItem.getImageId());
 
         return convertView;
+
     }
 
     @Override

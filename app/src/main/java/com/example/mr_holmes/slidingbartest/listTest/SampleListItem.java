@@ -1,4 +1,4 @@
-package com.example.mr_holmes.slidingbartest;
+package com.example.mr_holmes.slidingbartest.listTest;
 
 /**
  * Created by Mr_Holmes on 22/01/15.

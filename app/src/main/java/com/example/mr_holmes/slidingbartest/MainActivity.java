@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -24,9 +23,11 @@ import android.widget.SearchView;
 import com.example.mr_holmes.slidingbartest.animationHelper.BackgroundColorChangerHSV;
 import com.example.mr_holmes.slidingbartest.animationHelper.DpHelper;
 import com.example.mr_holmes.slidingbartest.animationHelper.LayoutDimensionChanger;
+//import com.example.mr_holmes.slidingbartest.listTest.SampleListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.example.mr_holmes.slidingbartest.listTest.FragmentListView;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -221,7 +222,7 @@ public class MainActivity extends ActionBarActivity {
         mButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
-                Intent to2ndActivity = new Intent(MainActivity.this, SampleListView.class);
+                Intent to2ndActivity = new Intent(MainActivity.this, MainActivity2.class);
                 startActivity(to2ndActivity);
             }
         });
