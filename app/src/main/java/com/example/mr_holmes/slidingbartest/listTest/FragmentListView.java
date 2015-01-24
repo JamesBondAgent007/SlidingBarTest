@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,9 +24,10 @@ public class FragmentListView extends Fragment {
 
     public FragmentListView() {}
 
+    //probabilmente questo metodo non serve
     @Override
-    public void onAttach(Activity mainActivity2) {
-        super.onAttach(mainActivity2);
+    public void onAttach(Activity parentActivity) {
+        super.onAttach(parentActivity);
     }
 
     @Override
@@ -55,5 +57,8 @@ public class FragmentListView extends Fragment {
         listView.setAdapter(adapter);
 
     }
+
+    //TODO: implementare l'onClickListener per andare alla descrizione se clickato sul titolo
+    //TODO: alla navigazione se clickato su immagine
 
 }

@@ -65,7 +65,7 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return SampleList.indexOf(getItemId(position));
+        return position;
     }
 
     @Override

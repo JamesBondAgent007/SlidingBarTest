@@ -23,11 +23,9 @@ import android.widget.SearchView;
 import com.example.mr_holmes.slidingbartest.animationHelper.BackgroundColorChangerHSV;
 import com.example.mr_holmes.slidingbartest.animationHelper.DpHelper;
 import com.example.mr_holmes.slidingbartest.animationHelper.LayoutDimensionChanger;
-//import com.example.mr_holmes.slidingbartest.listTest.SampleListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.example.mr_holmes.slidingbartest.listTest.FragmentListView;
 
 public class MainActivity extends ActionBarActivity {
 
