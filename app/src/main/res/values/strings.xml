@@ -50,9 +50,5 @@
         among the most famous in existence.[1] His output in every field during his long life was prodigious;
         when the sheer volume of correspondence, sketches, and reminiscences that survive is also taken into account,
         he is the best-documented artist of the 16th century. </string>
-    <string name="title_activity_main_activity2">MainActivity2</string>
-    <string name="title_activity_sample_list_view">SampleListView</string>
-    <string name="activity_info">This is the Activity2</string>
-    <string name="fragment_info">This is the fragment, list goes here</string>
 
 </resources>

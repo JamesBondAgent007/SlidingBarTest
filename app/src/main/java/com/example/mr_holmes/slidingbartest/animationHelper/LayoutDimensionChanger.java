@@ -12,6 +12,7 @@ public class LayoutDimensionChanger
     private ViewGroup layout;
     private ViewGroup.LayoutParams layoutParams;
     private Context context;
+
     public LayoutDimensionChanger(ViewGroup layout, Context context)
     {
         this.layout = layout;
@@ -25,11 +26,13 @@ public class LayoutDimensionChanger
         layout.setMinimumHeight(height);
         layoutParams.height = height;
     }
+
     public void setWidth(int width)
     {
         layout.setMinimumWidth(width);
         layoutParams.width = width;
     }
+
     public void setDpHeight(int dpHeight)
     {
             this.setHeight( dpToPx(dpHeight, context) );

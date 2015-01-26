@@ -1,4 +1,4 @@
-package com.example.mr_holmes.slidingbartest.listTest;
+package com.example.mr_holmes.slidingbartest.CustomList;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import com.example.mr_holmes.slidingbartest.R;
 public class FragmentListView extends Fragment {
 
     ListView listView;
-    List<SampleListItem> sampleListItems;
+    List<ListItem> listItems;
 
     public FragmentListView() {}
 
@@ -43,17 +42,17 @@ public class FragmentListView extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        sampleListItems = new ArrayList<SampleListItem>();
+        listItems = new ArrayList<ListItem>();
         for(int i = 0; i < 20; i++)
         {
             String str = new String();
             str = "Description number " + i;
-            SampleListItem item = new SampleListItem(R.drawable.graphic, str);
-            sampleListItems.add(item);
+            ListItem item = new ListItem(R.drawable.graphic, str);
+            listItems.add(item);
         }
 
         listView = (ListView) getView().findViewById(R.id.descriptionList);
-        ListAdapter adapter = new ListAdapter(getActivity(), sampleListItems);
+        ListAdapter adapter = new ListAdapter(getActivity(), listItems);
         listView.setAdapter(adapter);
 
     }

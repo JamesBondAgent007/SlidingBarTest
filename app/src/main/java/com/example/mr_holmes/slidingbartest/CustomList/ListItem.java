@@ -1,14 +1,14 @@
-package com.example.mr_holmes.slidingbartest.listTest;
+package com.example.mr_holmes.slidingbartest.CustomList;
 
 /**
  * Created by Mr_Holmes on 22/01/15.
  */
-public class SampleListItem {
+public class ListItem {
 
     private String _description;
     private int _imageId;
 
-    public SampleListItem(int _imageId, String _description) {
+    public ListItem(int _imageId, String _description) {
         this._imageId = _imageId;
         this._description = _description;
     }

@@ -1,6 +1,8 @@
 package com.example.mr_holmes.slidingbartest;
 
 import android.animation.ObjectAnimator;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +22,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.SearchView;
 
+import com.example.mr_holmes.slidingbartest.CustomList.FragmentListView;
+import com.example.mr_holmes.slidingbartest.CustomList.FragmentListView2;
+import com.example.mr_holmes.slidingbartest.animationHelper.ScrollViewResizer;
 import com.example.mr_holmes.slidingbartest.animationHelper.BackgroundColorChangerHSV;
 import com.example.mr_holmes.slidingbartest.animationHelper.DpHelper;
 import com.example.mr_holmes.slidingbartest.animationHelper.LayoutDimensionChanger;
@@ -46,16 +51,22 @@ public class MainActivity extends ActionBarActivity {
 // * * * * * * * * * * * *  DEFINIZIONE E INIZIALIZZAZIONE LAYOUT * * * * * * * * * * * * * * * * *
     private RelativeLayout mSlidingBarBg;
     private LinearLayout mSlidingBar;
+    private RelativeLayout fragmentListContainer;
     private SlidingUpPanelLayout mSlidingUpPanelLayout;
     private TextView t;
     private ScrollView scrollView;
     private SearchView mSearch;
     private FloatingActionButton mButton;
+    private LinearLayout dragView;
+    FragmentListView fragment1 = new FragmentListView();
+    FragmentListView2 fragment2 = new FragmentListView2();
+
+//* * * * * * * * * * * *  FLAGS  * * * * * * * * * * * * * * *
+
     private boolean fadeOutAnimationStarted = false;
     private boolean colorAnimationStarted = false;
-    private ListView museumList;
-    private LinearLayout dragView;
 
+    private int fragmentNumber = 1; //flag temporaneo per test
 
     private void initActivityAndXML()
     {
@@ -70,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
         mSlidingBarBg = (RelativeLayout) findViewById(R.id.slidingBarBg);
         mSlidingBar = (LinearLayout) findViewById(R.id.slidingBar);
         TextView t = (TextView) findViewById(R.id.main);
+        fragmentListContainer = (RelativeLayout) findViewById(R.id.fragment_list_container);
 
         final Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         final Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
@@ -81,6 +93,12 @@ public class MainActivity extends ActionBarActivity {
         mSlidingUpPanelLayout.setDragView(mSlidingBarBg);
         // sliding avviene solo se si scrolla sulla slidingBar e non se si scrolla il contenuto
 
+
+    //Setta il fragment della lista scorrevole
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_list_container, fragment1);
+        fragmentTransaction.commit();
 
     }
 
@@ -95,6 +113,7 @@ public class MainActivity extends ActionBarActivity {
             ObjectAnimator slidingBarHeightAnimation;
             BackgroundColorChangerHSV slidingBarColorChanger = new BackgroundColorChangerHSV(mSlidingBarBg, 255, 152, 0);
             ObjectAnimator slidingBarColorAnimation;
+            ScrollViewResizer scrollViewResizer = new ScrollViewResizer(mSlidingUpPanelLayout, fragmentListContainer);
 
 //            MarginChanger marginChanger = new MarginChanger((RelativeLayout.MarginLayoutParams) mSearch.getLayoutParams());
 //            ObjectAnimator searchBarAnimation;
@@ -195,7 +214,9 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onPanelExpanded(View panel) {
                 Log.i(TAG, "onPanelExpanded");
-                //resizeScrollView(0.0f); <-- da richiamare da altro file
+                
+                scrollViewResizer.resizeScrollView(0.0f);
+
             }
 
             @Override
@@ -207,7 +228,9 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onPanelAnchored(View panel) {
                 Log.i(TAG, "onPanelAnchored");
-                //resizeScrollView(ANCHOR_POINT);
+
+                scrollViewResizer.resizeScrollView(ANCHOR_POINT);
+
             }
 
             @Override
@@ -217,44 +240,36 @@ public class MainActivity extends ActionBarActivity {
         });
 
 
+        //Questo bottone dovrà portare alla navigazione
+        //per adesso si usa per test
         mButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
-                Intent to2ndActivity = new Intent(MainActivity.this, MainActivity2.class);
-                startActivity(to2ndActivity);
+
+                switch(fragmentNumber)
+                {
+
+                    case 1:
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_list_container, fragment2);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                            fragmentNumber = 2;
+                            break;
+                    case 2:
+                            FragmentTransaction transaction2 = getFragmentManager().beginTransaction();
+                            transaction2.replace(R.id.fragment_list_container, fragment1);
+                            transaction2.addToBackStack(null);
+                            transaction2.commit();
+                            fragmentNumber = 1;
+                            break;
+
+                }
+
             }
         });
 
     }
-
-
-
-// * * * * * * * * * * * * FUNZIONI PRIVATE (UTILITY / HELPER) * * * * * * * * * * * * * * * * * *
-
-//    private void resizeScrollView(final float slideOffset) {
-//        // The scrollViewHeight calculation would need to change based on what views are
-//        // in the sliding panel. The calculation below works because the layout has
-//        // 2 views. 1) The row with the drag view which is layout.getPanelHeight() high.
-//        // 2) The ScrollView.
-//
-//        if( slideOffset == 0.0f)
-//        {
-//            ViewGroup.LayoutParams params = museumList.getLayoutParams();
-//            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            museumList.setLayoutParams(params);
-//        }
-//        else
-//        {
-//            final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
-//            final ViewGroup.LayoutParams currentLayoutParams = museumList.getLayoutParams();
-//            currentLayoutParams.height = scrollViewHeight;
-//            museumList.setLayoutParams(currentLayoutParams);
-//        }
-//
-//            //final int scrollViewHeight = (int) ((mSlidingUpPanelLayout.getHeight() - mSlidingUpPanelLayout.getPanelHeight()) * (1.0f - slideOffset));
-//
-//    }
-
 
 
 // * * * * * * * * * * * * * * *  EVENT MANAGER DELLA ACTIVITY * * * * * * * * * * * * * * *

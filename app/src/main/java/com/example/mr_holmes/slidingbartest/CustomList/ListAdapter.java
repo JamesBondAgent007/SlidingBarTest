@@ -1,4 +1,4 @@
-package com.example.mr_holmes.slidingbartest.listTest;
+package com.example.mr_holmes.slidingbartest.CustomList;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import com.example.mr_holmes.slidingbartest.R;
 public class ListAdapter extends BaseAdapter {
 
     Context context;
-    List<SampleListItem> SampleList; //lista di oggetti base della lista (sono questi che si possono modificare a piacimento)
+    List<ListItem> list; //lista di oggetti base della lista (sono questi che si possono modificare a piacimento)
 
     //questa classe andrà portata fuori e chiaramente cambia a seconda del layout
     private class ViewHolder
@@ -28,9 +28,9 @@ public class ListAdapter extends BaseAdapter {
         TextView _txt;
     }
 
-    public ListAdapter(Context context, List<SampleListItem> sampleList) {
+    public ListAdapter(Context context, List<ListItem> list) {
         this.context = context;
-        SampleList = sampleList;
+        this.list = list;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -39,7 +39,7 @@ public class ListAdapter extends BaseAdapter {
         LayoutInflater mInflater = (LayoutInflater)
                 context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.sample_list_item, null);
+            convertView = mInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
             holder._txt = (TextView) convertView.findViewById(R.id.txt);            //Questa parte di codice andrebbe resa più flessibile
             holder._image = (ImageView) convertView.findViewById(R.id.listImage);   //basterebbe fare un metodo che prende viewHolder
@@ -49,10 +49,10 @@ public class ListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        SampleListItem sampleListItemItem = (SampleListItem) getItem(position);
+        ListItem listItem = (ListItem) getItem(position);
 
-        holder._txt.setText(sampleListItemItem.getDescription());       //Anche questa parte deve diventare più flessibile
-        holder._image.setImageResource(sampleListItemItem.getImageId());
+        holder._txt.setText(listItem.getDescription());       //Anche questa parte deve diventare più flessibile
+        holder._image.setImageResource(listItem.getImageId());
 
         return convertView;
 
@@ -60,7 +60,7 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return SampleList.size();
+        return list.size();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return SampleList.get(position);
+        return list.get(position);
     }
 
 }
